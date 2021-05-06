@@ -1,40 +1,33 @@
 import requests
 import json
 
-def splitLyrics(lyr):
 
+def split_lyrics(lyr):
     verses = lyr.split("\n\n")
 
-    joinedVerses = []
+    joined_verses = []
 
     while len(verses) > 0:
-        joinedVerse = ""
-        verseCount = 0
+        joined_verse = ""
+        verse_count = 0
 
         while True:
-            print("verseLength " + str(len(verses[verseCount:])))
-            if len(verses[verseCount:]) == 0:
-              break
-            
-            verseToBeAdded = verses[verseCount:][0]
-
-            if (len(joinedVerse) + len(verseToBeAdded)) > 2048:
+            v = verses[verse_count:]
+            if len(verses[verse_count:]) == 0:
                 break
 
-            print(verseToBeAdded)
-            joinedVerse = joinedVerse + verseToBeAdded
-            verseCount = verseCount + 1
+            verse_to_be_added = verses[verse_count:][0]
 
-        verses = verses[verseCount-1:]
-        joinedVerses.append(joinedVerse)
-        """print(joinedVerse)
-        print(joinedVerses)
-        print(verseCount)
-        print("\n\n")"""
+            if (len(joined_verse) + len(verse_to_be_added)) + len("\n\n") > 2048:
+                break
 
-    print(verses)
+            joined_verse = (joined_verse + "\n\n" + verse_to_be_added).strip()
+            verse_count = verse_count + 1
 
-    return lyr
+        verses = verses[verse_count:]
+        joined_verses.append(joined_verse)
+
+    return joined_verses
 
 
 response = requests.get(
@@ -42,4 +35,8 @@ response = requests.get(
 
 jsonResponse = json.loads(response.text)
 
-lyricsArray = splitLyrics(jsonResponse['lyrics'])
+verseArray = split_lyrics(jsonResponse['lyrics'])
+
+for verse in verseArray:
+    print(verse)
+    print("\n\n--\n\n")
