@@ -1,22 +1,38 @@
 import requests
 import json
 
-
 def splitLyrics(lyr):
-    verseIndices = []
-    lastIndex = 0
 
-    # Find where the different verses begin.
-    while True:
-        nextIndex = lyr.find("\n\n", lastIndex+1)
+    verses = lyr.split("\n\n")
 
-        if nextIndex == -1:
-            break
+    joinedVerses = []
 
-        lastIndex = nextIndex
-        verseIndices.append(nextIndex)
+    while len(verses) > 0:
+        joinedVerse = ""
+        verseCount = 0
 
-    
+        while True:
+            print("verseLength " + str(len(verses[verseCount:])))
+            if len(verses[verseCount:]) == 0:
+              break
+            
+            verseToBeAdded = verses[verseCount:][0]
+
+            if (len(joinedVerse) + len(verseToBeAdded)) > 2048:
+                break
+
+            print(verseToBeAdded)
+            joinedVerse = joinedVerse + verseToBeAdded
+            verseCount = verseCount + 1
+
+        verses = verses[verseCount-1:]
+        joinedVerses.append(joinedVerse)
+        """print(joinedVerse)
+        print(joinedVerses)
+        print(verseCount)
+        print("\n\n")"""
+
+    print(verses)
 
     return lyr
 
