@@ -34,16 +34,23 @@ def split_lyrics(lyr):
 
 request_url = "https://some-random-api.ml/lyrics?title=you%20should%20be%20sad"
 
-print("## Request URL ##")
+print("\n\n## Request URL ##\n\n")
 print(request_url)
-response = requests.get(request_url)
 
-jsonResponse = json.loads(response.text)
+jsonResponse = None
 
-print("## Unsplit Lyrics ##")
+while True:
+    tempRes = requests.get(request_url)
+    tempJson = json.loads(tempRes.text)
+    if(tempJson['lyrics'].find("\n\n") != -1):
+        jsonResponse = tempJson
+        break
+
+print("\n\n## Unsplit Lyrics ##\n\n")
+
 print(jsonResponse['lyrics'])
 
-print("## Split Lyrics ##")
+print("\n\n## Split Lyrics ##\n\n")
 verseArray = split_lyrics(jsonResponse['lyrics'])
 
 for verse in verseArray:
