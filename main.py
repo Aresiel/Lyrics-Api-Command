@@ -30,11 +30,20 @@ def split_lyrics(lyr):
     return joined_verses
 
 
-response = requests.get(
-    "https://some-random-api.ml/lyrics?title=you%20should%20be%20sad")
+#song = "https://some-random-api.ml/lyrics?title={0}".format(input("Song? ")).replace(" ", "%20")
+
+request_url = "https://some-random-api.ml/lyrics?title=you%20should%20be%20sad"
+
+print("## Request URL ##")
+print(request_url)
+response = requests.get(request_url)
 
 jsonResponse = json.loads(response.text)
 
+print("## Unsplit Lyrics ##")
+print(jsonResponse['lyrics'])
+
+print("## Split Lyrics ##")
 verseArray = split_lyrics(jsonResponse['lyrics'])
 
 for verse in verseArray:
